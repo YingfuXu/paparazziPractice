@@ -326,8 +326,11 @@ void guidance_v_run(bool in_flight)
 
     case GUIDANCE_V_MODE_HOVER:
       guidance_v_guided_mode = GUIDANCE_V_GUIDED_MODE_ZHOLD;
+      // printf("Run1?\n");
     case GUIDANCE_V_MODE_GUIDED:
+      // printf("Run2?\n");
       guidance_v_guided_run(in_flight);
+      // printf("Run3?\n");
       break;
 
 #if GUIDANCE_V_MODE_MODULE_SETTING == GUIDANCE_V_MODE_MODULE
@@ -518,6 +521,7 @@ void guidance_v_guided_run(bool in_flight)
       // Altitude Hold
       guidance_v_zd_sp = 0;
       gv_update_ref_from_z_sp(guidance_v_z_sp);
+      printf("Altitude Commend = %d \n", stateGetPositionNed_i()->z);  // Yingfu Testing
       run_hover_loop(in_flight);
       break;
     case GUIDANCE_V_GUIDED_MODE_CLIMB:

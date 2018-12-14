@@ -254,7 +254,7 @@ void autopilot_static_set_mode(uint8_t new_autopilot_mode)
         guidance_h_mode_changed(GUIDANCE_H_MODE_NAV);
         break;
       case AP_MODE_MODULE:
-#ifdef GUIDANCE_H_MODE_MODULE_SETTING
+#ifdef GUIDANCE_H_MODE_MODULE_SETTING   /* ??what is  GUIDANCE_H_MODE_MODULE_SETTING ? */
         guidance_h_mode_changed(GUIDANCE_H_MODE_MODULE_SETTING);
 #endif
         break;

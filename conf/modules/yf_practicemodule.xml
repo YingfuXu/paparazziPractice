@@ -1,0 +1,34 @@
+<!DOCTYPE module SYSTEM "module.dtd">
+
+<module name="yf_practicemodule">
+
+  <doc>
+    <description>
+    For YF's first attempt to create a new module. 
+    Its main function is to 
+    1. print system time in a terminal;
+    2. guide the Bebop to fly pre-planned trajectories in the CyberZoo 
+    using Optitrack or optical flow.
+    </description>
+  </doc>
+
+  <header>
+    <file name="yf_practicemodule.h"/>
+  </header>
+
+  <init fun="time_printer_init ()"/>
+
+  <periodic fun="clock_time_printer ()" period="1"/>  <!--  start="printer" stop="finish_printing" -->
+
+  <event fun="timeout_ending ()"/>  <!--event function name called in each cycle of the main AP loop -->
+
+  <makefile>
+    <file name="yf_practicemodule.c"/>
+
+    <!-- including the files needed for system time. /home/yingfu/paparazzi -->
+    <!-- <file name="sys_time.h" dir="sw/airborne/mcu_periph"/>   -->
+    <!-- <file name="mcu.h" dir="sw/airborne"/> -->
+  </makefile>
+
+</module>
+

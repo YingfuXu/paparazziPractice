@@ -39,8 +39,8 @@
 #include "subsystems/datalink/downlink.h"
 
 /** Default sender to accect VELOCITY_ESTIMATE messages from */
-#ifndef VISION_VELOCITY_ESTIMATE_ID
-#define VISION_VELOCITY_ESTIMATE_ID ABI_BROADCAST
+#ifndef VISION_VELOCITY_ESTIMATE_ID 
+#define VISION_VELOCITY_ESTIMATE_ID 1  // OPTICFLOW_SEND_ABI_ID  // ABI_BROADCAST  //Yingfu Testing
 #endif
 PRINT_CONFIG_VAR(VISION_VELOCITY_ESTIMATE_ID)
 
@@ -99,13 +99,20 @@ struct opticflow_stab_t opticflow_stab = {
 
 static void stabilization_opticflow_vel_cb(uint8_t sender_id __attribute__((unused)),
     uint32_t stamp, float vel_x, float vel_y, float vel_z, float noise);
+
+/* Yingfu Practice */
+static void velocity_following_opticflow_vel_cb(uint8_t sender_id __attribute__((unused)),
+    uint32_t stamp, float vel_x, float vel_y, float vel_z, float noise);
+
 /**
  * Initialization of horizontal guidance module.
  */
 void guidance_h_module_init(void)
 {
-  // Subscribe to the VELOCITY_ESTIMATE ABI message
-  AbiBindMsgVELOCITY_ESTIMATE(VISION_VELOCITY_ESTIMATE_ID, &velocity_est_ev, stabilization_opticflow_vel_cb);
+  // Subscribe to the VELOCITY_ESTIMATE ABI message  // to define the "velocity_est_ev", which is a "abi_event", by ID (VISION_VELOCITY_ESTIMATE_ID) and CallBack function (stabilization_opticflow_vel_cb).
+  AbiBindMsgVELOCITY_ESTIMATE(VISION_VELOCITY_ESTIMATE_ID, &velocity_est_ev, stabilization_opticflow_vel_cb);  //define a callback function, stabilization_opticflow_vel_cb, when there is velocity_est_ev signal come in, run the callback function.
+  // Yingfu Testing: Run AbiBindMsgVELOCITY_ESTIMATE Only Once
+  //AbiBindMsgVELOCITY_ESTIMATE(VISION_VELOCITY_ESTIMATE_ID, &velocity_est_ev, velocity_following_opticflow_vel_cb);
 }
 
 /**
@@ -173,4 +180,50 @@ static void stabilization_opticflow_vel_cb(uint8_t sender_id __attribute__((unus
   /* Bound the roll and pitch commands */
   BoundAbs(opticflow_stab.cmd.phi, CMD_OF_SAT);
   BoundAbs(opticflow_stab.cmd.theta, CMD_OF_SAT);
+
+  // Yingfu
+  // printf("%f  %f CMD!\n", opticflow_stab.cmd.theta, opticflow_stab.cmd.phi /* , err_vx, err_vy */);
+  // printf("%f  %f\n", opticflow_stab.cmd.theta/2851.0*40.0, err_vx);
+  // printf("%f  %f I!\n", opticflow_stab.theta_igain, opticflow_stab.phi_igain);
+
+}
+
+/**
+ * Yingfu Practice: Fly in a time-varying command speed
+ */
+static void velocity_following_opticflow_vel_cb(uint8_t sender_id __attribute__((unused)),
+    uint32_t stamp, float vel_x, float vel_y, float vel_z, float noise)
+{
+  /* Check if we are in the correct AP_MODE before setting commands */
+  if (autopilot_get_mode() != AP_MODE_MODULE) {
+    return;
+  }
+
+  /* Time varying velocity command */
+  vel_x_t = 0.8 * sin(0.2 * 360.0 * get_sys_time_float() / 180.0 * 3.14159);  // 20 second / circle
+  vel_y_t = 0; //1.8 * cos(0.1 * 360 * get_sys_time_usec() / 180 * 3.14159);
+
+  /* Calculate the error */
+  float err_vx = vel_x_t - vel_x;
+  float err_vy = vel_y_t - vel_y;
+
+  /* Calculate the integrated errors (TODO: bound??) */
+  opticflow_stab.err_vx_int += err_vx / 512;
+  opticflow_stab.err_vy_int += err_vy / 512;
+
+  /* Calculate the commands */
+  opticflow_stab.cmd.phi   = opticflow_stab.phi_pgain * err_vy
+                             + opticflow_stab.phi_igain * opticflow_stab.err_vy_int;
+  opticflow_stab.cmd.theta = -(opticflow_stab.theta_pgain * err_vx
+                               + opticflow_stab.theta_igain * opticflow_stab.err_vx_int);
+
+  /* Bound the roll and pitch commands */
+  BoundAbs(opticflow_stab.cmd.phi, CMD_OF_SAT);
+  BoundAbs(opticflow_stab.cmd.theta, CMD_OF_SAT);
+
+  // Yingfu
+  // printf("%f  %f CMD!\n", opticflow_stab.cmd.theta, opticflow_stab.cmd.phi /* , err_vx, err_vy */);
+  printf("%f  %f \n", opticflow_stab.cmd.theta/2851.0*40.0, vel_x_t);
+  // printf("%f  %f I!\n", opticflow_stab.theta_igain, opticflow_stab.phi_igain);
+
 }

@@ -1,0 +1,19 @@
+{
+    "files.associations": {
+        "autopilot.h": "c",
+        "paparazzi.h": "c",
+        "navigation.h": "c",
+        "linear_flow_fit.h": "c",
+        "yf_practicemodule.h": "c",
+        "sys_time.h": "c",
+        "mcu.h": "c",
+        "autopilot_guided.h": "c",
+        "state.h": "c",
+        "opticflow_module.h": "c",
+        "ctrl_module_demo.h": "c",
+        "opticflow_calculator.h": "c",
+        "cv.h": "c",
+        "kalman_filter_vision.h": "c",
+        "guidance_opticflow_hover.h": "c"
+    }
+}

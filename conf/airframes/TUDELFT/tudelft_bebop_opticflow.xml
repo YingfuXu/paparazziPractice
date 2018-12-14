@@ -31,7 +31,7 @@
     <module name="geo_mag"/>
     <module name="air_data"/>
     <module name="send_imu_mag_current"/>
-    <module name="pose_history"/>
+    <module name="pose_history"/>  <!-- For log purpose? -->
     <module name="video_thread"/>
 
     <module name="cv_opticflow">
@@ -56,6 +56,7 @@
       <define name="VIEWVIDEO_QUALITY_FACTOR" value="60"/>
     </module-->
 
+    <module name="opticflow_hover"/>  <!-- Yingfu Practice -->
 
   </modules>
 
@@ -173,7 +174,7 @@
     <define name="ADAPTIVE_MU" value="0.0001"/>
   </section>
 
-  <section name="GUIDANCE_V" prefix="GUIDANCE_V_">
+  <section name="GUIDANCE_V" prefix="GUIDANCE_V_">  <!-- Pay attention! -->
     <define name="HOVER_KP" value="283"/>
     <define name="HOVER_KD" value="82"/>
     <define name="HOVER_KI" value="70"/>
@@ -181,7 +182,7 @@
     <define name="ADAPT_THROTTLE_ENABLED" value="FALSE"/>
   </section>
 
-  <section name="GUIDANCE_H" prefix="GUIDANCE_H_">
+  <section name="GUIDANCE_H" prefix="GUIDANCE_H_">  <!-- Pay attention! -->
     <define name="USE_SPEED_REF" value="TRUE"/>
     <define name="REF_MAX_SPEED" value="0.5" unit="m/s"/>
 
@@ -190,7 +191,7 @@
     <!-- Bad weather -->
     <!-- define name="MAX_BANK" value="32" unit="deg"/ -->
 
-    <define name="PGAIN" value="0"/>
+    <define name="PGAIN" value="50"/>  <!-- what is this controller? why PGain == 0 ? -->
     <define name="DGAIN" value="80"/>
     <define name="IGAIN" value="20"/>
   </section>
@@ -207,11 +208,11 @@
   </section>
 
   <section name="AUTOPILOT">
-    <define name="MODE_STARTUP" value="AP_MODE_NAV"/>
+    <define name="MODE_STARTUP" value="AP_MODE_NAV"/><!-- AP_MODE_NAV -->
     <define name="MODE_MANUAL" value="AP_MODE_ATTITUDE_DIRECT"/>
     <define name="MODE_AUTO1" value="AP_MODE_MODULE"/>
-    <define name="MODE_AUTO2" value="AP_MODE_HOVER_Z_HOLD"/>
-    <define name="NO_RC_THRUST_LIMIT"  value="TRUE"/>
+    <define name="MODE_AUTO2" value="AP_MODE_MODULE"/>  <!--AP_MODE_HOVER_Z_HOLD-->
+    <define name="NO_RC_THRUST_LIMIT" value="TRUE"/>
   </section>
 
   <section name="BAT">

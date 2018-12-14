@@ -1,0 +1,9 @@
+case后面的常量表达式实际上只起语句标号作用，而不起条件判断作用，即“只是开始执行处的入口标号”。因此，一旦与switch后面圆括号中表达式的值匹配，就从此标号处开始执行；而且执行完一个case后面的语句后，若没遇到break语句，就自动进入下一个case继续执行，而不再判断是否与之匹配，直到遇到break语句才停止执行，退出switch语句。因此，若想执行一个case分之后立即跳出switch语句，就必须在此分支的最后添加一个break语句。示例见：guidance_v.c文件的 void guidance_v_run(bool in_flight) 函数：
+    case GUIDANCE_V_MODE_HOVER:
+      guidance_v_guided_mode = GUIDANCE_V_GUIDED_MODE_ZHOLD;
+      // printf("Run1?\n");
+    case GUIDANCE_V_MODE_GUIDED:
+      // printf("Run2?\n");
+      guidance_v_guided_run(in_flight);
+      // printf("Run3?\n");
+      break;

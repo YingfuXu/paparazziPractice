@@ -721,7 +721,7 @@ bool guidance_h_set_guided_vel(float vx, float vy)
   if (guidance_h.mode == GUIDANCE_H_MODE_GUIDED) {
     SetBit(guidance_h.sp.mask, 5);
     guidance_h.sp.speed.x = SPEED_BFP_OF_REAL(vx);
-    guidance_h.sp.speed.y = SPEED_BFP_OF_REAL(vy);
+    guidance_h.sp.speed.y = SPEED_BFP_OF_REAL(vy);  // how does it do to the velocity controller? Where is the reference velocity?
     return true;
   }
   return false;

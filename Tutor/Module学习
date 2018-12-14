@@ -1,0 +1,47 @@
+	Optical Flow Module
+I.  conf/airframes/TUDELFT/tudelft_bebop_opticflow.xml <define name="MODE_AUTO2" value="AP_MODE_MODULE"/>
+II. AP_MODE_MODULE :  sw/airborne/firmwares/rotorcraft/autopilot_static.c :  void autopilot_static_set_mode(uint8_t new_autopilot_mode)
+	switch (new_autopilot_mode)	
+	case AP_MODE_MODULE:
+	#ifdef GUIDANCE_H_MODE_MODULE_SETTING
+		guidance_h_mode_changed(GUIDANCE_H_MODE_MODULE_SETTING);
+	#endif
+
+	guidance_h_mode_changed()
+
+	void autopilot_static_set_mode(uint8_t new_autopilot_mode)
+I. sw/airborne/autopilot.c
+	/**
+	 * @file autopilot.c
+	 *
+	 * Core autopilot interface common to all firmwares.
+	 * Using either static or generated autopilot logic,
+	 * which depends on the firmware.
+	 *
+	 */
+
+	/** set autopilot mode */
+	bool autopilot_set_mode(uint8_t new_autopilot_mode)
+	{
+	#if USE_GENERATED_AUTOPILOT
+  	autopilot_generated_set_mode(new_autopilot_mode);
+	#else
+  	autopilot_static_set_mode(new_autopilot_mode);
+	#endif
+  	return (autopilot.mode != new_autopilot_mode);
+	}
+
+	bool autopilot_set_mode(uint8_t new_autopilot_mode)
+I. 
+
+从遥控器切换档位到guidance_h_mode_changed()的执行过程见纸质材料。
+
+guidance_h_mode_changed()
+
+
+void autopilot_static_periodic(void) (autopilot_static.c)调用guidance_v_run(autopilot_in_flight())，进行switch判断，由于opticflow_hover的.xml文件定义了V_HOVER，因此执行guidance_v_guided_mode = GUIDANCE_V_GUIDED_MODE_ZHOLD;和guidance_v_guided_run(in_flight);
+
+
+
+
+

@@ -48,6 +48,10 @@ struct opticflow_stab_t {
 };
 extern struct opticflow_stab_t opticflow_stab;
 
+/* Yingfu Practice */
+float vel_x_t;
+float vel_y_t;
+
 // Implement own Horizontal loops
 extern void guidance_h_module_init(void);
 extern void guidance_h_module_enter(void);

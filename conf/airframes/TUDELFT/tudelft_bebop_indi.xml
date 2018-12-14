@@ -18,17 +18,18 @@
     <module name="motor_mixing"/>
     <module name="actuators" type="bebop"/>
     <module name="imu" type="bebop"/>
-    <module name="gps" type="furuno"/>
+    <module name="gps" type="datalink"/>  <!--furuno-->
     <module name="stabilization" type="indi_simple"/>
     <module name="stabilization" type="rate_indi"/>
     <module name="ahrs" type="int_cmpl_quat">
-      <configure name="USE_MAGNETOMETER" value="TRUE"/>
-      <define name="AHRS_USE_GPS_HEADING" value="FALSE"/>
+      <configure name="USE_MAGNETOMETER" value="FALSE"/> <!--furuno-->
+      <define name="AHRS_USE_GPS_HEADING" value="TRUE"/>
     </module>
     <module name="ins" type="extended"/>
     <module name="guidance" type="indi">
       <define name="GUIDANCE_INDI_SPECIFIC_FORCE_GAIN" value="-500.0"/>
     </module>
+
   </firmware>
 
   <modules main_freq="512">
@@ -38,6 +39,10 @@
     <module name="logger_file">
       <define name="FILE_LOGGER_PATH" value="/data/ftp/internal_000"/>
     </module>
+
+    <!-- Yingfu for practice time printer -->
+    <module name="yf_practicemodule"/> 
+
   </modules>
 
   <commands>
@@ -72,7 +77,7 @@
   <section name="AIR_DATA" prefix="AIR_DATA_">
     <define name="CALC_AIRSPEED" value="FALSE"/>
     <define name="CALC_TAS_FACTOR" value="FALSE"/>
-    <define name="CALC_AMSL_BARO" value="TRUE"/>
+    <define name="CALC_AMSL_BARO" value="FALSE"/>  <!--TRUE-->
   </section>
 
   <include href="conf/airframes/TUDELFT/calibrations/bebop7.xml" />
@@ -97,7 +102,7 @@
   </section>
 
   <section name="INS" prefix="INS_">
-    <define name="SONAR_MAX_RANGE" value="2.2"/>
+    <define name="SONAR_MAX_RANGE" value="1.2"/>
     <define name="SONAR_UPDATE_ON_AGL" value="TRUE"/>
   </section>
 
@@ -192,11 +197,10 @@
   </section>
 
   <section name="AUTOPILOT">
-    <define name="MODE_STARTUP" value="AP_MODE_NAV"/>
+    <define name="MODE_STARTUP" value="AP_MODE_NAV"/>  <!--AP_MODE_NAV  AP_MODE_GUIDED>-->
     <define name="MODE_MANUAL" value="AP_MODE_ATTITUDE_DIRECT"/>
     <define name="MODE_AUTO1" value="AP_MODE_ATTITUDE_Z_HOLD"/>
-    <define name="MODE_AUTO2" value="AP_MODE_NAV"/>
-
+    <define name="MODE_AUTO2" value="AP_MODE_GUIDED"/> <!--AP_MODE_MODULE-->
     <define name="NO_RC_THRUST_LIMIT" value="TRUE"/>
   </section>
 

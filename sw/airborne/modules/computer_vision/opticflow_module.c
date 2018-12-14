@@ -158,12 +158,14 @@ void opticflow_module_run(void)
                            opticflow_state.agl);
     //TODO Find an appropiate quality measure for the noise model in the state filter, for now it is tracked_cnt
     if (opticflow_result.noise_measurement < 0.8) {
-      AbiSendMsgVELOCITY_ESTIMATE(OPTICFLOW_SEND_ABI_ID, now_ts,
-                                  opticflow_result.vel_body_x,
-                                  opticflow_result.vel_body_y,
-                                  0.0f,
-                                  opticflow_result.noise_measurement
-                                 );
+    AbiSendMsgVELOCITY_ESTIMATE(OPTICFLOW_SEND_ABI_ID, now_ts,  // why  OPTICFLOW_SEND_ABI_ID == 1 ?
+                                opticflow_result.vel_body_x,
+                                opticflow_result.vel_body_y,
+                                0.0f,
+                                opticflow_result.noise_measurement
+                                );
+                                // Yingfu
+                                // printf("%f  %f  cv_opticflow sending abi message! \n", opticflow_result.vel_body_x, opticflow_result.vel_body_y);
     }
     opticflow_got_result = false;
   }
@@ -195,7 +197,6 @@ struct image_t *opticflow_module_calc(struct image_t *img)
   opticflow_result = temp_result;
   opticflow_got_result = true;
 
-
   // release the mutex as we are done with editing the opticflow result
   pthread_mutex_unlock(&opticflow_mutex);
   return img;
@@ -211,6 +212,7 @@ static void opticflow_agl_cb(uint8_t sender_id __attribute__((unused)), float di
   // Update the distance if we got a valid measurement
   if (distance > 0) {
     opticflow_state.agl = distance;
+    printf("%f \n",distance);  // Yingfu Testing
   }
 }
 

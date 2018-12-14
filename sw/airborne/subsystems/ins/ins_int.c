@@ -306,7 +306,7 @@ void ins_int_propagate(struct Int32Vect3 *accel, float dt)
   ins_int.ltp_accel.y = accel_meas_ltp.y;
 #endif /* USE_HFF */
 
-  ins_ned_to_state();
+  ins_ned_to_state(); // state give value
 
   /* increment the propagation counter, while making sure it doesn't overflow */
   if (ins_int.propagation_cnt < 100 * INS_MAX_PROPAGATION_STEPS) {
